@@ -1,6 +1,6 @@
 FROM composer:2 AS composer
 
-FROM webdevops/php-nginx:8.3-alpine
+FROM webdevops/php-nginx:8.4-alpine
 
 ENV WEB_DOCUMENT_ROOT=/app/public
 ENV APP_ENV=production
