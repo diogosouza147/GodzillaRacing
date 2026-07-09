@@ -1,20 +1,22 @@
-FROM richarvey/nginx-php-fpm:3.1.6
+FROM composer:2 AS composer
+
+FROM webdevops/php-nginx:8.3-alpine
+
+ENV WEB_DOCUMENT_ROOT=/app/public
+ENV APP_ENV=production
+ENV APP_DEBUG=false
+
+COPY --from=composer /usr/bin/composer /usr/bin/composer
+
+WORKDIR /app
 
 COPY . .
 
-# Configuração da imagem
-ENV SKIP_COMPOSER 1
-ENV WEBROOT /var/www/html/public
-ENV PHP_ERRORS_STDERR 1
-ENV RUN_SCRIPTS 1
-ENV REAL_IP_HEADER 1
+RUN composer install --no-interaction --optimize-autoloader --no-dev
 
-# Configuração do Laravel (valores reais vêm das Environment Variables do Render)
-ENV APP_ENV production
-ENV APP_DEBUG false
-ENV LOG_CHANNEL stderr
+COPY docker/entrypoint.d/10-artisan.sh /opt/docker/provision/entrypoint.d/10-artisan.sh
+RUN chmod +x /opt/docker/provision/entrypoint.d/10-artisan.sh \
+    && chown -R application:application /app \
+    && chmod -R 775 /app/storage /app/bootstrap/cache
 
-# Permite o Composer rodar como root dentro do container
-ENV COMPOSER_ALLOW_SUPERUSER 1
-
-CMD ["/start.sh"]
+EXPOSE 80

@@ -1,7 +1,5 @@
-#!/usr/bin/env bash
-
-echo "Instalando dependências do Composer..."
-composer install --no-dev --optimize-autoloader --working-dir=/var/www/html
+#!/bin/sh
+set -e
 
 echo "Cacheando configuração..."
 php artisan config:cache
