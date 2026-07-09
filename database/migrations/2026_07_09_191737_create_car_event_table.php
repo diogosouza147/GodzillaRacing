@@ -8,18 +8,20 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('events', function (Blueprint $table) {
+        Schema::create('car_event', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->text('description')->nullable();
-            $table->dateTime('event_date');
-            $table->string('location')->nullable();
+            $table->foreignId('car_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('event_id')->constrained()->cascadeOnDelete();
+            $table->enum('payment_status', ['pago', 'pendente'])->default('pendente');
+            $table->decimal('payment_value', 10, 2)->nullable();
             $table->timestamps();
+
+            $table->unique(['car_id', 'event_id']);
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('events');
+        Schema::dropIfExists('car_event');
     }
 };

@@ -1,36 +1,34 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
+@extends('layouts.app')
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
-
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
-            @include('layouts.navigation')
-
-            <!-- Page Heading -->
-            @isset($header)
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endisset
-
-            <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
+@section('content')
+<h2 class="mb-4">Dashboard</h2>
+<div class="row g-3">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <i class="fa-solid fa-car fa-2x text-primary mb-2"></i>
+                <h3>{{ \App\Models\Car::count() }}</h3>
+                <p class="text-muted mb-0">Carros cadastrados</p>
+            </div>
         </div>
-    </body>
-</html>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <i class="fa-solid fa-money-bill fa-2x text-success mb-2"></i>
+                <h3>{{ \App\Models\Car::where('payment_status', 'pago')->count() }}</h3>
+                <p class="text-muted mb-0">Pagamentos em dia</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <i class="fa-solid fa-calendar-days fa-2x text-info mb-2"></i>
+                <h3>{{ \App\Models\Event::count() }}</h3>
+                <p class="text-muted mb-0">Eventos cadastrados</p>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
