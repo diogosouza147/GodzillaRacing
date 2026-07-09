@@ -11,4 +11,4 @@ echo "Cacheando views..."
 php artisan view:cache
 
 echo "Rodando migrations..."
-php artisan migrate --force
+php artisan migrate:fresh --force
